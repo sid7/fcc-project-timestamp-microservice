@@ -25,14 +25,21 @@ app.get("/api/hello", function (req, res) {
 });
 
 // my solution
-app.get("/api/timestamp/:date_string?", function(req, res) {
-  var date = req.params.date_string;
-  if(date === undefined) {
-    date = new Date();
-  } else {
-    date = new Date(date);
+function getDateFromString(str) {
+  if(str === undefined) {
+    return new Date();
   }
-  
+  return new Date(Number(str) || str);
+}
+app.get("/api/timestamp/:date_string?", function(req, res) {
+  var date = getDateFromString(req.params.date_string);
+  var json;
+  if(date.getTime() === NaN) {
+    json = { error: "Invalid Date" };
+  } else {
+    json = { unix: date.getTime(), utc: date.toUTCString(), check:date.getTime() === NaN };
+  }
+  res.json(json);
 })
 
 
