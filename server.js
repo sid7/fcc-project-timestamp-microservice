@@ -34,10 +34,10 @@ function getDateFromString(str) {
 app.get("/api/timestamp/:date_string?", function(req, res) {
   var date = getDateFromString(req.params.date_string);
   var json;
-  if(date.getTime() === NaN) {
+  if(isNaN(date.getTime())) {
     json = { error: "Invalid Date" };
   } else {
-    json = { unix: date.getTime(), utc: date.toUTCString(), check:date.getTime() === NaN };
+    json = { unix: date.getTime(), utc: date.toUTCString() };
   }
   res.json(json);
 })
